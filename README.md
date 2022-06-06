@@ -162,8 +162,10 @@ new BrotliPlugin({
 
 The above plugins control the compression parameters of the app during the bundling/minification process. Here, assets bigger than the `threshold` - and ones that compress better than the `minRatio` value - are processed. The `BrotliPlugin` is not a typical Webpack plugin, and in order to gain the effects of it, the application must be configured for Brotli compression in its final production home. If using [AWS](https://aws.amazon.com/), for example, it must be configured for [Brotli](https://en.wikipedia.org/wiki/Brotli) compression. On the client side, if using the common [Node.js](https://nodejs.org/en/) framework [Express](https://expressjs.com) and implementing compression paradigms, then the [express-static-gzip](https://github.com/tkoenig89/express-static-gzip) library is used, and it is possible to implement a preference for Brotli compression, with a Gzip fallback.
 
-```j 
+```js
+const express = require('express');
 const expressStaticGzip = require('express-static-gzip');
+const server = express();
 
 ...
 
