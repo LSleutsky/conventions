@@ -467,6 +467,16 @@ import * as Imgix from 'utils/imgix';
 <img alt="Description" src={Imgix.getAwsAssetPath(`img/image.png`)} />
 ```
 
+#### Default imgix Config
+
+imgix also allows you to set default parameters for images from within the account dashboard, so that they may serve as primary defaults, or as a fallback. There is an option to set a default image, which will render as a placeholder image if there is an issue with retrieving the desired image path. Conversely, you can also set a default error image, if the resulting image path will return an error:
+
+![image-defaults](https://user-images.githubusercontent.com/7631797/172155701-c3475f2c-6762-4ac1-b379-24ee96b943ec.png)
+
+The service also allows setting caching policies for images:
+
+![image-cache-settings](https://user-images.githubusercontent.com/7631797/172155698-d8342222-0a34-4d69-bf3d-97bb1f372ebf.png)
+
 ### Lazy Loading
 
 For lazy-loading images, there are the terms above-the-fold and below-the-fold. For the latter, these are images that are not immediately visible when the site first loads, and the former are the immediate images that are in the viewport right when the site loads. Lazy-loading images involves putting emphasis on below-the-fold images, only loading them when they come into the viewport. There is the [Intersection Observer API](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API) which listens to a scroll event and observes changes in the intersection of a target element with an ancestor element or with a top-level element's viewport.
