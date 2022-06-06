@@ -70,12 +70,21 @@ The above allows for the `babel-loader` to be used with file extensions found in
   include: path.join(__dirname, `app`),
   loader: `babel-loader`,
   options: {
-    cacheDirectory: true
+    cacheDirectory: true,
+    presets: [
+      [
+        `@babel/preset-env`,
+        {
+          modules: false,
+          useBuiltIns: `usage`
+        }
+      ]
+    ]
   }
 }
 ```
 
-The `cacheDirectory` option aims to cache the results of the loader, and future Webpack builds attempt to read from the cache, to save expensive Babel recompilation processes.
+The `cacheDirectory` option aims to cache the results of the loader, and future Webpack builds attempt to read from the cache, to save expensive Babel recompilation processes. The `useBuiltIns` option is used so that Babel polyfills will be added automatically when the usage of some feature is unsupported in the target environment.
 
 #### Sass
 
@@ -453,7 +462,7 @@ const propsToParams = props => {
 export const getAwsAssetPath = (bucketUrl, props) => {
   const params = propsToParams({ ...DEFAULT_PROPS, ...props });
 
-  return `${IMGIX_URL}${bucketUrl}?${props}`;
+  return `${IMGIX_URL}${bucketUrl}?${params}`;
 }
 ```
 
