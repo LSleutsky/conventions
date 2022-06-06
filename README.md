@@ -38,10 +38,6 @@ It's not as simple as just going into the `package.json` and arbitrarily updatin
 
 The application being presented here is on Webpack version `4.46.0`, which is the latest Webpack version 4, so we must exercise caution when updating third-party modules, taking care to scan the changelog to make sure the version we are choosing is compatible with the active Webpack version.
 
-## Babel
-
-[Babel](https://babeljs.io/) is a JavaScript compiler that most modern frameworks leverage in order to be able to convert modern JavaScript syntax into a backwards-compatible version that can be run by older browsers.
-
 ## Webpack
 
 [Webpack](https://webpack.js.org/) is arguably the most popular application bundler out there. While many new and experimental - and marketed as faster - bundlers are now flooding the market, Webpack is a tried and true tool that has been part of countless projects. This particular repository assumes a Webpack-based application when taking into account the various performance considerations.
@@ -60,6 +56,10 @@ Webpack `rules` configurations allow for different [loader](https://webpack.js.o
   loader: `babel-loader`
 }
 ```
+
+#### Babel
+
+[Babel](https://babeljs.io/) is a JavaScript compiler that most modern frameworks leverage in order to be able to convert modern JavaScript syntax into a backwards-compatible version that can be run by older browsers. We will look at Babel optimizations more later on in this documentation.
 
 The above allows for the `babel-loader` to be used with file extensions found in the `test` field, so long as those files are part of the `include`d directory. This _rule_ can be further optimized:
 
