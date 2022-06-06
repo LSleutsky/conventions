@@ -82,28 +82,40 @@ The `cacheDirectory` option aims to cache the results of the loader, and future 
 Sass is a popular CSS preprocessor used in most modern web applications that makes writing styles easier and more productive, allowing things like reusable utilities and CSS functions. To be able to use Sass in something like a React application, a loader needs to be setup in Webpack's `rules` configuration. We want to setup this rule to be optimized and utilize a more performance-centric rule.
 
 ```js
-{
-  loader: `sass-loader`,
-  options: {
-    sourceMap: true,
-    webpackImporter: false,
-    sassOptions: {
-      outputStyle: `compressed`
+const rules = [
+  {
+    loader: `sass-loader`,
+    options: {
+      sourceMap: true,
+      webpackImporter: false,
+      sassOptions: {
+        outputStyle: `compressed`
+      }
     }
   }
-}
+
+  ...
+]
+
+export default rules;
 ```
 
 Another great performant Webpack loader is the `prerender-loader`, which does exactly what it's name implies. This loader also works closely with a common Webpack [plugin](#plugins) called the [HTML Webpack Plugin](https://github.com/jantimon/html-webpack-plugin).
 
 ```js
-{
-  test: path.join(__dirname, `index.html`),
-  loader: `prerender-loader`,
-  options: {
-    string: true
-  }
+const rules = [ ... ];
+
+if (!process.env.IS_DEVELOPMENT) {
+  rules.push({
+    test: path.join(__dirname, `index.html`),
+    loader: `prerender-loader`,
+    options: {
+      string: true
+    }
+  });
 }
+
+export default rules;
 ```
 
 ### Plugins
@@ -192,7 +204,7 @@ The Webpack `optimization` array allows for a configuration which targets produc
 The `minimize` parameter set to `true` is a very simple way to use Webpack's under-the-hood optimizations, which include [tree-shaking](https://webpack.js.org/guides/tree-shaking/) dead code removal. There is also a `minimizer` parameter, which allows you to set an optimization plugin that runs during compilation builds. Traditionally, the [TerserWebpackPlugin](https://github.com/webpack-contrib/terser-webpack-plugin) has been used in such optimizations, and now with the more modern addition of [ESBuild](https://esbuild.github.io/) in the tech world, we can use `TerserPlugin.esbuildMinify` to leverage the latter's optimizing goodness.
 
 ```js
-{
+const optimization = {
   minimize: true,
   minimizer: [
     new TerserPlugin({
@@ -214,14 +226,16 @@ The `minimize` parameter set to `true` is a very simple way to use Webpack's und
   ],
 
   ...
-}
+};
+
+export default optimization;
 ```
 
 #### Code Splitting and Chunks
 
 Code splitting consists of splitting code into various bundles which can then be lazy-loaded on-demand. As an app grows, so does the size of it, and code splitting is a paradigm which allows you to break down the size of large modules into smaller chunks, decreasing the weight of negative performance hits.
 
-#### Webpack Magic Comments
+#### Hints / Magic Comments
 
 Webpack has a pattern which is referred to as hints or magic comments. When implementing code splitting / lazy-loading, a common library that is used is the [Loadable Components](https://loadable-components.com/) library. This library is typically used over the native `React.lazy` and `React.Suspense` features because those native features do not work with server-side rendered apps, while the _Loadable Components_ library does.
 
@@ -255,7 +269,7 @@ The `webpackChunkName` - as well as the other inline comments - are referred to 
 The `lazy` mode generates a lazy-loadable chunk for each imported module, while the `eager` mode does not generate extra chunks, so no additional network requests are made. It is good and common practice to use `webpackPrefetch` with `lazy` mode, and `webpackPreload` with `eager` mode. The latter tells the browser that the resource _might_ be needed in the current navigation, and the former tells the browser that the resource is more than likely needed. These cool Webpack features are all related to the below optimization config:
 
 ```js
-{
+const optimization = {
   ...
 
   chunkIds: `total-size`,
@@ -290,7 +304,9 @@ The `lazy` mode generates a lazy-loadable chunk for each imported module, while 
         enforce: true
       }
     }
-}
+};
+
+export default optimization;
 ```
 
 ### Webpack Mode
@@ -298,13 +314,24 @@ The `lazy` mode generates a lazy-loadable chunk for each imported module, while 
 Another important and useful Webpack optimization is one of the most simple ones. In the main Webpack configuration file:
 
 ```js
-mode: `production`
+const webpackConfig = {
+  mode: `production`
+
+  ...
+};
+
+export default webpackConfig;
 ```
 
 Sets predefined Webpack production enhancements into place. If using one configuration file for both development and production builds, it's best to use a conditional to determine which environment we are currently in:
 
 ```js
-mode: process.env.IS_DEVELOPMENT ? `development` : `production`
+const webpackConfig = {
+  mode: process.env.IS_DEVELOPMENT ? `development` : `production`
+  ...
+};
+
+export default webpackConfig;
 ```
 
 ## Babel Optimizations
@@ -361,13 +388,23 @@ plugins: [
 This is a very powerful `import` pattern which allows you to utilize imports as if they were promises, and import modules on demand. For example, in the [Firebase](https://firebase.google.com/)-leveraging application used for presentation, we can import the main `firebase/app` dependency at the moment in which we need to use it:
 
 ```js
-const { initializeApp } = await import(`firebase/app`);
+async initialize() {
+  const { initializeApp } = await import(`firebase/app`);
+
+  ...
+}
 ```
 
 With `firebase/app`, and with this application, we also need to import `firebase/auth` and `firebase/database`, both of which are very heavy libraries. So, we dynamically import them, so that we call on them as they are needed:
 
 ```js
-await Promise.all([import(`firebase/auth`), import(`firebase/database`)]);
+async initialize() {
+  const { initializeApp } = await import(`firebase/app`);
+
+  await Promise.all([import(`firebase/auth`), import(`firebase/database`)]);
+
+  ...
+}
 ```
 
 ## Image Optimizations
