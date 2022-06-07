@@ -88,7 +88,7 @@ The `cacheDirectory` option aims to cache the results of the loader, and future 
 
 #### Sass
 
-Sass is a popular CSS preprocessor used in most modern web applications that makes writing styles easier and more productive, allowing things like reusable utilities and CSS functions. To be able to use Sass in something like a React application, a loader needs to be setup in Webpack's `rules` configuration. We want to setup this rule to be optimized and utilize a more performance-centric rule.
+Sass is a popular CSS preprocessor used in most modern web applications that makes writing styles easier and more productive, allowing things like reusable utilities and CSS functions. To be able to use Sass in something like a React application, a loader needs to be setup in Webpack's `rules` configuration. We want to setup this rule to be optimized and utilize a more performance-centric pattern.
 
 ```js
 const rules = [
@@ -132,11 +132,21 @@ export default rules;
 In referring back to the [Low-Hanging Fruit](#low-hanging-fruit) section above, a great first Webpack plugin to leverage is called the [UnusedWebpackPlugin](https://github.com/MatthieuLemoine/unused-webpack-plugin). This plugin lives in your Webpack config's `plugin` array, and when the app is being built, looks for any and all unused files. The plugin can be set up in such a way that the build does not complete successfully if there are unused files found:
 
 ```js
-new UnusedWebpackPlugin({
-  directories: [PATHS.app],
-  exclude: [PATHS.exclude]
-  failOnUnused: true
-}),
+import UnusedWebpackPlugin from 'unused-webpack-plugin';
+
+...
+
+const plugins = [
+  ...
+
+  new UnusedWebpackPlugin({
+    directories: [PATHS.app],
+    exclude: [PATHS.exclude]
+    failOnUnused: true
+  })
+];
+
+export default plugins;
 ```
 
 A directory in which to look for unused files - as well as what you wish to `exclude` - are useful parameters to provide this plugin to ensure there are no lingering unused files or assets weighing down your bundled site.
@@ -144,20 +154,30 @@ A directory in which to look for unused files - as well as what you wish to `exc
 There are many other useful Webpack plugins that are very important for performance:
 
 ```js
-new CompressionPlugin({
-  filename: `[path][base].gz`,
-  algorithm: `gzip`,
-  test: /\.(js|(sc|c)ss|html|svg)$/,
-  threshold: 10240,
-  minRatio: 0.7
-}),
+import BrotliPlugin from 'brotli-webpack-plugin';
+import CompressionPlugin from 'compression-webpack-plugin';
 
-new BrotliPlugin({
-  filename: `[path][base].br`,
-  test: /\.js$|\.(sc|c)ss$|\.html$|\.svg$/,
-  threshold: 10240,
-  minRatio: 0.7
-}),
+...
+
+const plugins = [
+  ...
+
+  new CompressionPlugin({
+    filename: `[path][base].gz`,
+    algorithm: `gzip`,
+    test: /\.(js|(sc|c)ss|html|svg)$/,
+    threshold: 10240,
+    minRatio: 0.7
+  }),
+  new BrotliPlugin({
+    filename: `[path][base].br`,
+    test: /\.js$|\.(sc|c)ss$|\.html$|\.svg$/,
+    threshold: 10240,
+    minRatio: 0.7
+  })
+];
+
+export default plugins;
 ```
 
 The above plugins control the compression parameters of the app during the bundling/minification process. Here, assets bigger than the `threshold` - and ones that compress better than the `minRatio` value - are processed. The `BrotliPlugin` is not a typical Webpack plugin, and in order to gain the effects of it, the application must be configured for Brotli compression in its final production home. If using [AWS](https://aws.amazon.com/), for example, it must be configured for [Brotli](https://en.wikipedia.org/wiki/Brotli) compression. On the client side, if using the common [Node.js](https://nodejs.org/en/) framework [Express](https://expressjs.com) and implementing compression paradigms, then the [express-static-gzip](https://github.com/tkoenig89/express-static-gzip) library is used, and it is possible to implement a preference for Brotli compression, with a Gzip fallback.
@@ -181,11 +201,19 @@ server.use(expressStaticGzip(DIST_PATH, {
 Shifting back to Webpack plugins, another very powerful plugin is the [Optimize CSS Assets Webpack Plugin](https://github.com/NMFR/optimize-css-assets-webpack-plugin), which optimizes and minimizes CSS assets:
 
 ```js
-new OptimizeCssAssetsPlugin({
-  cssProcessorPluginOptions: {
-    preset: [`default`, { discardComments: { removeAll: true } }]
-  }
-})
+import OptimizeCssAssetsPlugin from 'optimize-css-assets-webpack-plugin';
+
+const plugins = [
+  ...
+
+  new OptimizeCssAssetsPlugin({
+    cssProcessorPluginOptions: {
+      preset: [`default`, { discardComments: { removeAll: true } }]
+    }
+  })
+];
+
+export default plugins;
 ```
 
 The above config also removes any comments found in your CSS styles, when bundling the app for production.
@@ -193,17 +221,27 @@ The above config also removes any comments found in your CSS styles, when bundli
 These plugins mentioned so far have been ones that can be used in both development and production environments alike. There are some Webpack plugins that are designed to exclusively work in production, and their benefits won't be felt or seen in a development environment, and can even sometimes worsen such an environment.
 
 ```js
-new CrittersWebpackPlugin({
-  inlineFonts: true,
-  keyframes: `critical`,
-  noscriptFallback: true,
-  preload: `swap`,
-  preloadFonts: true
-}),
+import CrittersWebpackPlugin from 'critters-webpack-plugin';
+import CssCleanupPlugin from 'css-cleanup-webpack-plugin';
+import webpack from 'webpack';
 
-new CssCleanupPlugin(),
+const plugins = [ ... ];
 
-new webpack.AutomaticPrefetchPlugin()
+if (!process.env.IS_DEVELOPMENT) {
+  plugins.push(
+    new CrittersWebpackPlugin({
+      inlineFonts: true,
+      keyframes: `critical`,
+      noscriptFallback: true,
+      preload: `swap`,
+      preloadFonts: true
+    }),
+    new CssCleanupPlugin(),
+    new webpack.AutomaticPrefetchPlugin()
+  );
+}
+
+export default plugins;
 ```
 
 The [CrittersWebpackPlugin](https://github.com/GoogleChromeLabs/critters) inline's the app's critical CSS and then lazy-loads the rest, on-demand. The [CssCleanupPlugin](https://github.com/do-web/css-cleanup-webpack-plugin) is plugin that aims to remove unused CSS and duplicate rules. And the [AutomaticPrefetchPlugin](https://webpack.js.org/plugins/automatic-prefetch-plugin/) watches for modules from previous builds, and tries to improve on incremental build times.
@@ -215,6 +253,8 @@ The Webpack `optimization` array allows for a configuration which targets produc
 The `minimize` parameter set to `true` is a very simple way to use Webpack's under-the-hood optimizations, which include [tree-shaking](https://webpack.js.org/guides/tree-shaking/) dead code removal. There is also a `minimizer` parameter, which allows you to set an optimization plugin that runs during compilation builds. Traditionally, the [TerserWebpackPlugin](https://github.com/webpack-contrib/terser-webpack-plugin) has been used in such optimizations, and now with the more modern addition of [ESBuild](https://esbuild.github.io/) in the tech world, we can use `TerserPlugin.esbuildMinify` to leverage the latter's optimizing goodness.
 
 ```js
+import TerserPlugin from 'terser-webpack-plugin';
+
 const optimization = {
   minimize: true,
   minimizer: [
@@ -396,7 +436,7 @@ plugins: [
 
 ## Dynamic Imports
 
-This is a very powerful `import` pattern which allows you to utilize imports as if they were promises, and import modules on demand. For example, in the [Firebase](https://firebase.google.com/)-leveraging application used for presentation, we can import the main `firebase/app` dependency at the moment in which we need to use it:
+This is a very powerful `import` pattern which allows you to utilize imports as if they were promises, and import modules on demand. For example, if using something like [Firebase](https://firebase.google.com/), we can import dependencies dynamically, at the moment that we need them, instead of always importing heavy dependencies statically:
 
 ```js
 async initialize() {
@@ -406,7 +446,7 @@ async initialize() {
 }
 ```
 
-With `firebase/app`, and with this application, we also need to import `firebase/auth` and `firebase/database`, both of which are very heavy libraries. So, we dynamically import them, so that we call on them as they are needed:
+With `firebase/app`, we also need to import `firebase/auth` and `firebase/database`, both of which are very heavy libraries. So, we dynamically import them, so that we call on them as they are needed:
 
 ```js
 async initialize() {
