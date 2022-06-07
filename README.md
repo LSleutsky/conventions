@@ -136,6 +136,11 @@ import UnusedWebpackPlugin from 'unused-webpack-plugin';
 
 ...
 
+const PATHS = {
+  app: `path/to/app`,
+  exclude: `path/to/exclude`
+};
+
 const plugins = [
   ...
 
@@ -180,7 +185,7 @@ const plugins = [
 export default plugins;
 ```
 
-The above plugins control the compression parameters of the app during the bundling/minification process. Here, assets bigger than the `threshold` - and ones that compress better than the `minRatio` value - are processed. The `BrotliPlugin` is not a typical Webpack plugin, and in order to gain the effects of it, the application must be configured for Brotli compression in its final production home. If using [AWS](https://aws.amazon.com/), for example, it must be configured for [Brotli](https://en.wikipedia.org/wiki/Brotli) compression. On the client side, if using the common [Node.js](https://nodejs.org/en/) framework [Express](https://expressjs.com) and implementing compression paradigms, then the [express-static-gzip](https://github.com/tkoenig89/express-static-gzip) library is used, and it is possible to implement a preference for Brotli compression, with a Gzip fallback.
+The order of these above plugins is important. They control the compression components of the app during the bundling/minification process. Here, assets bigger than the `threshold` - and ones that compress better than the `minRatio` value - are processed. The `BrotliPlugin` is not a typical Webpack plugin, and in order to gain the effects of it, the application must be configured for Brotli compression in its final production home. If using [AWS](https://aws.amazon.com/), for example, it must be configured for [Brotli](https://en.wikipedia.org/wiki/Brotli) compression. On the client side, if using the common [Node.js](https://nodejs.org/en/) framework [Express](https://expressjs.com) and implementing compression paradigms, then the [express-static-gzip](https://github.com/tkoenig89/express-static-gzip) library is used, and it is possible to implement a preference for Brotli compression, with a Gzip fallback.
 
 ```js
 const express = require('express');
@@ -298,6 +303,7 @@ import loadable from '@loadable/component';
 ...
 
 const loadableFallbackOptions = { ... };
+
 const Component = loadable(
   () =>
     import (
