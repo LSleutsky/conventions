@@ -36,7 +36,7 @@ This will keep the version of React updated to the latest version 16, so that co
 
 It's not as simple as just going into the `package.json` and arbitrarily updating a package to the latest version. There can be **_many_** breaking changes with a later version, and compatibility with your application could be very limited. It is critical that if considering to update a dependency to a later major version, to visit the package's home page and read thru a changelog, which lists all of the package updates, version by version, and includes breaking changes for specific versions.
 
-The application being presented here is on Webpack version `4.46.0`, which is the latest Webpack version 4, so we must exercise caution when updating third-party modules, taking care to scan the changelog to make sure the version we are choosing is compatible with the active Webpack version.
+The example application being used for this documentation is assumed to be on Webpack version `4.46.0`, which is the latest Webpack version 4, so we must exercise caution when updating third-party modules, taking care to scan the changelog to make sure the version we are choosing is compatible with the active Webpack version.
 
 ## Webpack
 
