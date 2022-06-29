@@ -1,6 +1,8 @@
-```json
-// .eslintrc.json
+## ESLint
 
+The below is a configuration template for an `.eslintrc.json` file:
+
+```json
 "settings": {
     "react": {
       "version": "detect"
