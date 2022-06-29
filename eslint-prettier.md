@@ -114,3 +114,18 @@ The below is a configuration template for an `.eslintrc.json` file:
   }
 ]
 ```
+
+## Prettier
+
+The below is a configuration template for a `.prettierrc.js` file:
+
+```js
+module.exports = {
+  "arrowParens": "avoid",
+  "printWidth": 100,
+  "semi": true,
+  "singleQuote": true,
+  "tabWidth": 2,
+  "trailingComma": "none"
+}
+```
