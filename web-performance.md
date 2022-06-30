@@ -36,7 +36,7 @@ This will keep the version of React updated to the latest version 16, so that co
 
 It's not as simple as just going into the `package.json` and arbitrarily updating a package to the latest version. There can be **_many_** breaking changes with a later version, and compatibility with your application could be very limited. It is critical that if considering to update a dependency to a later major version, to visit the package's home page and read thru a changelog, which lists all of the package updates, version by version, and includes breaking changes for specific versions.
 
-The example application being used for this documentation is assumed to be on Webpack version `4.46.0`, which is the latest Webpack version 4, so we must exercise caution when updating third-party modules, taking care to scan the changelog to make sure the version we are choosing is compatible with the active Webpack version.
+The application being used for this documentation - which is a live application that I have contributed heavily to - is assumed to be on Webpack version `4.46.0`, which is the latest Webpack version 4, so we must exercise caution when updating third-party modules, taking care to scan the changelog to make sure the version we are choosing is compatible with the active Webpack version.
 
 ## Webpack
 
@@ -49,12 +49,18 @@ Webpack configurations consist of different `rules`, `optimizations`, and `plugi
 Webpack `rules` configurations allow for different [loader](https://webpack.js.org/loaders/) configurations, which allow you to bundle static resources beyond JavaScript. One main performance point when it comes to Webpack `rules` is the [babel-loader](https://github.com/babel/babel-loader), which allows for transpiling JavaScript files with Webpack and Babel. The loader can be declared in a basic way to reap its benefits:
 
 ```js
-{
-  test: /\.(js|jsx)$/,
-  exclude: /node_modules/,
-  include: path.join(__dirname, `app`),
-  loader: `babel-loader`
-}
+const rules = [
+  {
+    test: /\.(js|jsx)$/,
+    exclude: /node_modules/,
+    include: path.join(__dirname, `app`),
+    loader: `babel-loader`
+  }
+
+  ...
+];
+
+export default rules;
 ```
 
 #### Babel
@@ -64,24 +70,30 @@ Webpack `rules` configurations allow for different [loader](https://webpack.js.o
 The above allows for the `babel-loader` to be used with file extensions found in the `test` field, so long as those files are part of the `include`d directory. This _rule_ can be further optimized:
 
 ```js
-{
-  test: /\.(js|jsx)$/,
-  exclude: /node_modules/,
-  include: path.join(__dirname, `app`),
-  loader: `babel-loader`,
-  options: {
-    cacheDirectory: true,
-    presets: [
-      [
-        `@babel/preset-env`,
-        {
-          modules: false,
-          useBuiltIns: `usage`
-        }
+const rules = [
+  {
+    test: /\.(js|jsx)$/,
+    exclude: /node_modules/,
+    include: path.join(__dirname, `app`),
+    loader: `babel-loader`,
+    options: {
+      cacheDirectory: true,
+      presets: [
+        [
+          `@babel/preset-env`,
+          {
+            modules: false,
+            useBuiltIns: `usage`
+          }
+        ]
       ]
-    ]
+    }
   }
-}
+
+  ...
+];
+
+export default rules;
 ```
 
 The `cacheDirectory` option aims to cache the results of the loader, and future Webpack builds attempt to read from the cache, to save expensive Babel recompilation processes. The `useBuiltIns` option is used so that Babel polyfills will be added automatically when the usage of some feature is unsupported in the target environment.
@@ -156,7 +168,7 @@ export default plugins;
 
 A directory in which to look for unused files - as well as what you wish to `exclude` - are useful parameters to provide this plugin to ensure there are no lingering unused files or assets weighing down your bundled site.
 
-There are many other useful Webpack plugins that are very important for performance:
+There are many other useful Webpack plugins that can greatly benefit performance gains:
 
 ```js
 import BrotliPlugin from 'brotli-webpack-plugin';
@@ -185,16 +197,22 @@ const plugins = [
 export default plugins;
 ```
 
-The order of these above plugins is important. They control the compression components of the app during the bundling/minification process. Here, assets bigger than the `threshold` - and ones that compress better than the `minRatio` value - are processed. The `BrotliPlugin` is not a typical Webpack plugin, and in order to gain the effects of it, the application must be configured for Brotli compression in its final production home. If using [AWS](https://aws.amazon.com/), for example, it must be configured for [Brotli](https://en.wikipedia.org/wiki/Brotli) compression. On the client side, if using the common [Node.js](https://nodejs.org/en/) framework [Express](https://expressjs.com) and implementing compression paradigms, then the [express-static-gzip](https://github.com/tkoenig89/express-static-gzip) library is used, and it is possible to implement a preference for Brotli compression, with a Gzip fallback.
+The order of these above plugins is important. They control the compression components of the app during the bundling/minification process. Here, assets bigger than the `threshold` - and ones that compress better than the `minRatio` value - are processed. The `brotli-webpack-plugin` is not a typical-use-case Webpack compression plugin, and in order to gain the benefits from it, the application must be configured for Brotli compression in its final production state. If using [AWS](https://aws.amazon.com/) (_like this web application_), for example, it must be configured for [Brotli](https://en.wikipedia.org/wiki/Brotli) compression. On the client side, if using the common [Node.js](https://nodejs.org/en/) framework [Express](https://expressjs.com) and implementing compression paradigms, then the [express-static-gzip](https://github.com/tkoenig89/express-static-gzip) library is used, and it is possible to implement a preference for Brotli compression, with a Gzip fallback.
 
 ```js
 const express = require('express');
 const expressStaticGzip = require('express-static-gzip');
-const server = express();
+
+const app = express();
+
+const PATHS = {
+  app: `path/to/app`,
+  bundle: `path/to/dist`
+};
 
 ...
 
-server.use(expressStaticGzip(DIST_PATH, {
+app.use(expressStaticGzip(PATHS.bundle, {
   enableBrotli: true,
   orderPreference: [`br`, `gz`],
   setHeaders: function (res, path) {
@@ -203,7 +221,7 @@ server.use(expressStaticGzip(DIST_PATH, {
 }));
 ```
 
-Shifting back to Webpack plugins, another very powerful plugin is the [Optimize CSS Assets Webpack Plugin](https://github.com/NMFR/optimize-css-assets-webpack-plugin), which optimizes and minimizes CSS assets:
+Another very powerful plugin is the [Optimize CSS Assets Webpack Plugin](https://github.com/NMFR/optimize-css-assets-webpack-plugin), which optimizes and minimizes CSS assets:
 
 ```js
 import OptimizeCssAssetsPlugin from 'optimize-css-assets-webpack-plugin';
@@ -249,7 +267,7 @@ if (!process.env.IS_DEVELOPMENT) {
 export default plugins;
 ```
 
-The [CrittersWebpackPlugin](https://github.com/GoogleChromeLabs/critters) inline's the app's critical CSS and then lazy-loads the rest, on-demand. The [CssCleanupPlugin](https://github.com/do-web/css-cleanup-webpack-plugin) is plugin that aims to remove unused CSS and duplicate rules. And the [AutomaticPrefetchPlugin](https://webpack.js.org/plugins/automatic-prefetch-plugin/) watches for modules from previous builds, and tries to improve on incremental build times.
+The [CrittersWebpackPlugin](https://github.com/GoogleChromeLabs/critters) inline's the app's critical CSS and then lazy-loads the rest, on-demand. The [CssCleanupPlugin](https://github.com/do-web/css-cleanup-webpack-plugin) is plugin that aims to remove unused CSS and duplicate rules. Finally, the [AutomaticPrefetchPlugin](https://webpack.js.org/plugins/automatic-prefetch-plugin/) watches for modules from previous builds, and tries to improve on incremental build times.
 
 ### Optimization
 
@@ -291,7 +309,7 @@ export default optimization;
 
 Code splitting consists of splitting code into various bundles which can then be lazy-loaded on-demand. As an app grows, so does the size of it, and code splitting is a paradigm which allows you to break down the size of large modules into smaller chunks, decreasing the weight of negative performance hits.
 
-#### Hints / Magic Comments
+#### Webpack Hints and Magic Comments
 
 Webpack has a pattern which is referred to as hints or magic comments. When implementing code splitting / lazy-loading, a common library that is used is the [Loadable Components](https://loadable-components.com/) library. This library is typically used over the native `React.lazy` and `React.Suspense` features because those native features do not work with server-side rendered apps, while the _Loadable Components_ library does.
 
@@ -480,9 +498,9 @@ In performance audits, attributes like `width` and `height` are now considered c
 
 ### imgix
 
-To save time in going thru hundreds of assets and either finding a UX resource to resize images, change their format, their quality, etc., an image service called [imgix](https://imgix.com/) was put into place. This image solution "transforms, optimizes, and intelligently caches your entire image library for fast websites and apps using simple and robust URL parameters."
+To save time in going thru hundreds of assets and either finding a UX resource to resize images, change their format, their quality, etc., an image service called [_imgix_](https://imgix.com/) was put into place. This image solution "_transforms, optimizes, and intelligently caches your entire image library for fast websites and apps using simple and robust URL parameters._"
 
-What does this mean for our app? All of our assets are stored in an AWS S3 bucket. imgix allows you to link and sync these buckets through their service, and then a URL is provided that routes the assets through imgix's sources, allowing the addition of URL parameters to handle things like compression, image size, quality, dimensions, and much more.
+What does this mean for our app? All of our assets are stored in an AWS S3 bucket. _imgix_ allows you to link and sync these buckets through their service, and then a URL is provided that routes the assets through _imgix's_ sources, allowing the addition of URL parameters to handle things like compression, image size, quality, dimensions, and much more.
 
 In practice, it is very simple to leverage this service in an application. First, a util file is created for the _imgix_ service:
 
@@ -526,28 +544,53 @@ import * as Imgix from 'utils/imgix';
 
 #### Default imgix Config
 
-imgix also allows you to set default parameters for images from within the account dashboard, so that they may serve as primary defaults, or as a fallback. There is an option to set a default image, which will render as a placeholder image if there is an issue with retrieving the desired image path. Conversely, you can also set a default error image, if the resulting image path will return an error:
+_imgix_ also allows you to set default parameters for images from within the account dashboard, so that they may serve as primary defaults, or as a fallback. There is an option to set a default image, which will render as a placeholder image if there is an issue with retrieving the desired image path. Conversely, you can also set a default error image, if the resulting image path will return an error:
 
 ![image-defaults](https://user-images.githubusercontent.com/7631797/172155701-c3475f2c-6762-4ac1-b379-24ee96b943ec.png)
 
-The service also allows setting caching policies for images:
+As you can see from the above image, the `format` value is missing from the `auto` parameter in the default config for the _imgix_ source, but we are using `format` in our util. The reason is simple: the `auto` parameter accepts different values as defaults, but `format` is not one of them, so we have to include it manually. The _imgix_ service also allows setting caching policies for images:
 
 ![image-cache-settings](https://user-images.githubusercontent.com/7631797/172155698-d8342222-0a34-4d69-bf3d-97bb1f372ebf.png)
 
 ### Lazy Loading
 
-For lazy-loading images, there are the terms above-the-fold and below-the-fold. For the latter, these are images that are not immediately visible when the site first loads, and the former are the immediate images that are in the viewport right when the site loads. Lazy-loading images involves putting emphasis on below-the-fold images, only loading them when they come into the viewport. There is the [Intersection Observer API](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API) which listens to a scroll event and observes changes in the intersection of a target element with an ancestor element or with a top-level element's viewport.
+For lazy-loading images, there are the terms above-the-fold and below-the-fold. For the latter, these are images that are not immediately visible when the site first loads, and the former are the immediate images that are in the viewport right when the site loads. Lazy-loading images involves putting emphasis on below-the-fold images, only loading them when they come into the viewport. To accomplish this, there is the [Intersection Observer API](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API), which is a utility that listens to a scroll event and observes changes in the intersection of a target element with an ancestor element or with a top-level element's viewport.
 
-#### Lazysizes
+#### lazysizes
 
-For a more automated and easier solution, the [Lazysizes](https://github.com/aFarkas/lazysizes) library handles the lazy-loading of images for you, without the need for complex code. The implementation is incredible simple, after importing the `lazysizes` module somewhere in or near the highest level of your app, it's as simple as this:
+For a more automated and easier solution, the [_lazysizes_](https://github.com/aFarkas/lazysizes) library handles the lazy-loading of images for you, without the need for complex code. The implementation is incredible simple, after importing the `lazysizes` module somewhere in or near the highest level of your app, it's as simple as this:
 
 ```js
+// index.js
+
+import React from 'react';
+import ReactDOM from 'react-dom';
+
+...
+
+import 'lazysizes';
+
+ReactDOM.render( ... );
+```
+
+Then using the _lazysizes_ pattern on an `img` tag is very simple:
+
+```js
+// some-component.js
+
+...
+
 <img alt="Description" className="lazyload" data-src="/path/to/image" />
 ```
 
 This can - and should - of course be combined with the _imgix_ service pattern:
 
 ```js
+// some-component.js
+
+import * as Imgix from 'utils/imgix';
+
+...
+
 <img alt="Description" className="lazyload" data-src={Imgix.getAwsAssetPath(`img/image.png`)} />
 ```

@@ -1,13 +1,13 @@
 ## ESLint
 
-The below is a configuration template for an `.eslintrc.json` file:
+The below is a configuration template for an `.eslintrc.json` file that has been used in a [Next.js](https://nextjs.org/) project with [TypeScript](https://www.typescriptlang.org/):
 
 ```json
 "settings": {
-    "react": {
-      "version": "detect"
-    }
-  },
+  "react": {
+    "version": "detect"
+  }
+},
 "rules": {
   "@typescript-eslint/explicit-function-return-type": "off",
   "@typescript-eslint/explicit-module-boundary-types": "off",
