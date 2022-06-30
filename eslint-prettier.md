@@ -78,6 +78,10 @@ The below is a configuration template for an `.eslintrc.json` file that has been
   ],
   "prefer-const": "error",
   "prettier/prettier": ["error", { "arrowParens": "avoid" }],
+  "react/jsx-sort-props": ["error", {
+    "ignoreCase": true,
+    "reservedFirst": true
+  }],
   "react/prop-types": "off",
   "react/react-in-jsx-scope": "off",
   "simple-import-sort/exports": "error",
