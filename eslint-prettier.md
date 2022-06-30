@@ -13,6 +13,7 @@ The below is a configuration template for an `.eslintrc.json` file that has been
   "@typescript-eslint/explicit-module-boundary-types": "off",
   "@typescript-eslint/no-explicit-any": "error",
   "@typescript-eslint/no-unused-vars": ["error", { "argsIgnorePattern": "^_" }],
+  "camelcase": "error",
   "import/export": "error",
   "import/newline-after-import": ["error", { "count": 1 }],
   "import/no-anonymous-default-export": "off",
