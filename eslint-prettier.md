@@ -1,4 +1,4 @@
-## ESLint
+## `ESLint`
 
 The below is a configuration template for an `.eslintrc.json` file that has been used in a [Next.js](https://nextjs.org/) project with [TypeScript](https://www.typescriptlang.org/):
 
@@ -119,7 +119,7 @@ The below is a configuration template for an `.eslintrc.json` file that has been
 ]
 ```
 
-## Prettier
+## `Prettier`
 
 The below is a configuration template for a `.prettierrc.js` file:
 
