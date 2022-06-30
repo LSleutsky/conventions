@@ -594,3 +594,17 @@ import * as Imgix from 'utils/imgix';
 
 <img alt="Description" className="lazyload" data-src={Imgix.getAwsAssetPath(`img/image.png`)} />
 ```
+
+This will work the same way on an `Image` element imported from `next/image` in a Next.js application:
+
+```js
+// some-next-component.js
+
+import Image from 'next/image';
+
+import * as Imgix from 'utils/imgix';
+
+...
+
+<Image alt="Description" className="lazyload" data-src={Imgix.getAwsAssetPath(`img/image.png`)} />
+```
