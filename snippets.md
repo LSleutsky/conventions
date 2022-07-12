@@ -1,8 +1,13 @@
 ## Command Line
 
 ```sh
-# copy filename from nvim command prompt
+# copy filename method 1
 !echo %:p | pbcopy
+```
+
+```sh
+# copy filename method 2
+!echo -n % | pbcopy
 ```
 
 ```sh
@@ -18,8 +23,16 @@ kubectl get pods -n <namespace>
 ```
 
 ```sh
+# get specific pod in yaml format
+kubectl get pod <pod> -o yaml
+
+# get specific pod in json format
+kubectl get pod <pod> -o json
+```
+
+```sh
 # edit specific kubernetes pod
-kubectl edit pod <pod name>
+kubectl edit pod <pod>
 ```
 
 ```sh
