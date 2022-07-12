@@ -148,13 +148,10 @@ The below is a configuration template for an `.eslintrc.json` file that has been
           "groups": [
             ["^react$", "react-dom", "react-redux", "^redux", "^next"],
             ["^@", "^\\w"],
-            ["^(api)(/.*|$)"],
             ["^(types)(/.*|$)"],
-            ["^(context)(/.*|$)"],
             ["^(pages)(/.*|$)"],
             ["^(components)(/.*|$)"],
             ["^(styles)(/.*|$)"],
-            ["^(constants)(/.*|$)"],
             ["^(utils)(/.*|$)"],
             ["^(config)(/.*|$)"],
             ["^\\.\\.(?!/?$)", "^\\.\\./?$"],
