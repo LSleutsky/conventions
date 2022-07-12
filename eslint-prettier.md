@@ -3,6 +3,27 @@
 The below is a configuration template for an `.eslintrc.json` file that has been used in a [Next.js](https://nextjs.org/) project with [TypeScript](https://www.typescriptlang.org/):
 
 ```json
+"plugins": [
+  "@typescript-eslint",
+  "react",
+  "@next/next",
+  "simple-import-sort",
+  "sort-keys-fix"
+],
+"extends": [
+  "react-app",
+  "eslint:recommended",
+  "plugin:import/typescript",
+  "plugin:react/recommended",
+  "plugin:@typescript-eslint/recommended",
+  "plugin:prettier/recommended",
+  "plugin:@next/next/recommended"
+],
+"settings": {
+  "react": {
+    "version": "detect"
+  }
+},
 "rules": {
   "@typescript-eslint/explicit-function-return-type": "off",
   "@typescript-eslint/explicit-module-boundary-types": "off",
