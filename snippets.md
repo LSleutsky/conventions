@@ -39,6 +39,17 @@ aws s3 ls
 ```sh
 # list s3 bucket contents
 aws s3 ls s3://<bucket_name>
+
+# list s3 bucket directory contents
+aws s3 ls s3://<bucket_name>/<dir>
+```
+
+```sh
+# copy from local dir to s3
+aws s3 cp <local> s3://<bucket_name>
+
+# copy from local dir to s3 with public read permissions
+aws s3 cp <local> s3://<bucket_name> --acl public-read
 ```
 
 ## `Kubernetes`
