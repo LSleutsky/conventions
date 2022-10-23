@@ -17,6 +17,11 @@ open -n -a /Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --args
 !echo -n % | pbcopy
 ```
 
+```sh
+# treesitter dependencies
+TSInstall bash comment css diff dockerfile dot gitattributes gitignore graphql help hjson html http javascript jsdoc json json5 jsonc lua make markdown php pug python regex ruby rust scss todotxt toml tsx typescript vim yaml
+```
+
 ## `AWS`
 
 ```sh
