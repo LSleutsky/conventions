@@ -1,11 +1,17 @@
-## `Command Line`
+# Command Line 
 
 ```sh
 # open chrome in cors-less state
 open -n -a /Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --args --user-data-dir="/tmp/chrome_dev_test" --disable-web-security
 ```
 
-## `Neovim`
+```sh
+# prepend text to file
+cat <<< "prepend"
+$(cat file) > file
+```
+
+# Neovim 
 
 ```sh
 # copy filename method 1
@@ -22,7 +28,15 @@ open -n -a /Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --args
 TSInstall bash comment css diff dockerfile dot gitattributes gitignore graphql help hjson html http javascript jsdoc json json5 jsonc lua make markdown php pug python regex ruby rust scss todotxt toml tsx typescript vim yaml
 ```
 
-## `AWS`
+```sh
+# case insensitive search
+\<search\>\c
+
+# case sensitive search
+\<search\>\C
+```
+
+# AWS 
 
 ```sh
 # list clusters
@@ -34,7 +48,7 @@ aws eks list-clusters
 aws eks update-kubeconfig --region <region_name> --name <cluster> --profile <aws_profile>
 ```
 
-### `S3`
+## S3 
 
 ```sh
 # list s3 buckets
@@ -57,7 +71,7 @@ aws s3 cp <local> s3://<bucket_name>
 aws s3 cp <local> s3://<bucket_name> --acl public-read
 ```
 
-## `Kubernetes`
+# Kubernetes 
 
 ```sh
 # get available kubernetes pods in given namespace
