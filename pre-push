@@ -1,10 +1,6 @@
 #!/bin/sh
 LC_ALL=C
 
-BLUE='\033[0;34m'
-GREEN='\033[0;32m'
-NC='\033[0m'
-
 local_branch="$(git rev-parse --abbrev-ref HEAD)"
 
 valid_branch_regex="^((main|master)|(build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test)\/[a-zA-Z0-9-]+)|((release)/[0-9.]+[a-z0-9.-]*)$"
@@ -12,8 +8,6 @@ valid_branch_regex="^((main|master)|(build|chore|ci|docs|feat|fix|perf|refactor|
 message="\nThere is something wrong with your branch name.
 
 Branch names in this repository must adhere to a commitlint pattern.
-
-Visit ${BLUE}https://gitlab.waitrapp.com/appdev/asap/unified-web#creating-a-new-branch${NC} for branch naming rules.
 
 Your push will be rejected. Please rename your branch to a valid name and try again.\n"
 

@@ -1,28 +1,28 @@
-# `Web Performance`
+# Web Performance
 
 A well-performing website is one which immediately engages users, keeps them on the page, and makes the UI a pleasure to interact with. But these things are hard to accomplish with a sluggish, latent product.
 
-This repository contains the different performance optimizations that I've implemented to bring performance metrics in tools like Google's _[Lighthouse](https://developer.chrome.com/docs/lighthouse/overview/)_ and _[Page Speed Insights](https://pagespeed.web.dev/)_ from very low scores ranging between 10-20, to incredibly high scores upwards of 90-95.
+This doc contains the different performance optimizations that I've implemented to bring performance metrics in tools like Google's _[Lighthouse](https://developer.chrome.com/docs/lighthouse/overview/)_ and _[Page Speed Insights](https://pagespeed.web.dev/)_ from very low scores ranging between 10-20, to incredibly high scores upwards of 90-95.
 
-## `What Is Web Performance?`
+## What Is Web Performance?
 
 Simple - web performance is not only about making websites fast, but it's also about making slower processes _appear_ fast. Things like spinners, skeleton loaders, or other interactive UI elements that provide some sort of feedback to the user, while another process is preparing or loading, play a big part in the _perceived_ performance of a site, which can be just as important as the physical enhancements.
 
-## `Where To Start?`
+## Where To Start?
 
 There are lots of different schools of thought on which facets of a web application should be prioritized to increase overall performance. The very concept of performance is usually approached with varied and subjective viewpoints. Things like accessibility, image optimizations, and things as basic as writing clean and organized code, all play a part in the raw speed of a website. To have a truly all-encompassing performant website, we also have to consider which device a user might be visiting the page on, and take into consideration the age of said device, as well as the connection speed.
 
 Large, content-full website load drastically different on a desktop computer connected to a cable or fiber-optic network, versus a 5 year old tablet on a mobile network, versus that same tablet in an area or country with limited data coverage. The [Mozilla Developer Network's](https://developer.mozilla.org/en-US/) write-up [The "why" of web performance](https://developer.mozilla.org/en-US/docs/Learn/Performance/why_web_performance) states that a 22.6MB site like [CNN.com](https://www.cnn.com) could take 83 seconds to load on a 3G network, with the base HTML structure of the page clocking in at over 30 seconds.
 
-## `Conversion Rates`
+## Conversion Rates
 
 Decreasing the render time and download time of a website improves that site's conversion rate, which essentially relates to users on a site performing actions like clicking a link, making a purchase, or signing up for a newsletter. Performance increases conversion rates. The average user begins leaving a website when the loading time starts to pass 3 seconds, and most users are now on mobile devices, which natively take longer to load sites than do desktop sites, because of things like data connections based on the area where a user is located.
 
-## `Low-Hanging Fruit`
+## Low-Hanging Fruit
 
 Optimizing and making a web application fast is no easy feat. There are lots of moving parts to consider. Depending on the tech stack of the app, things like Babel optimizations, Webpack configurations, dead code, images, and code splitting, are just a few of the components that can - and should - be focused on. Assuming an ideal-world scenario, where bandwidth is unlimited and resource allocation is not a conern, when starting to optimize an existing app, the first area to focus on is auditing the code base at a high level, and removing the glaring areas of dead/unused code, and duplicate code. Going through the different files and checking for clean, modularized code that is DRY and actually in use, is a great first step.
 
-## `Dependencies`
+## Dependencies
 
 It's hard to find an app that doesn't use third-party npm libraries, and it's always great to be able to use the most updated versions of these dependencies. There is a way to declare which versions of the package you wish to use in your `package.json` file, by declaring a package in this manner:
 
@@ -32,19 +32,19 @@ It's hard to find an app that doesn't use third-party npm libraries, and it's al
 
 This will keep the version of React updated to the latest version 16, so that constantly incrementing to `16.10.0` or `16.11.0` is not necessary. This will cap the version at the first and main number of the package's version. At the time of this writing, React is on version 18, and using the latest version is not possible if we declare the dependency like above in our `package.json` file.
 
-### `Changelog`
+### Changelog
 
 It's not as simple as just going into the `package.json` and arbitrarily updating a package to the latest version. There can be **_many_** breaking changes with a later version, and compatibility with your application could be very limited. It is critical that if considering to update a dependency to a later major version, to visit the package's home page and read thru a changelog, which lists all of the package updates, version by version, and includes breaking changes for specific versions.
 
 The application being used for this documentation - which is a live application that I have contributed heavily to - is assumed to be on Webpack version `4.46.0`, which is the latest Webpack version 4, so we must exercise caution when updating third-party modules, taking care to scan the changelog to make sure the version we are choosing is compatible with the active Webpack version.
 
-## `Webpack`
+## Webpack
 
 [Webpack](https://webpack.js.org/) is arguably the most popular application bundler out there. While many new and experimental - and marketed as faster - bundlers are now flooding the market, Webpack is a tried and true tool that has been part of countless projects. This particular repository assumes a Webpack-based application when taking into account the various performance considerations.
 
 Webpack configurations consist of different `rules`, `optimizations`, and `plugins` that all play a part in creating an optimized, minified application that serves up a performant product to end users.
 
-### `Rules`
+### Rules
 
 Webpack `rules` configurations allow for different [loader](https://webpack.js.org/loaders/) configurations, which allow you to bundle static resources beyond JavaScript. One main performance point when it comes to Webpack `rules` is the [babel-loader](https://github.com/babel/babel-loader), which allows for transpiling JavaScript files with Webpack and Babel. The loader can be declared in a basic way to reap its benefits:
 
@@ -63,7 +63,7 @@ const rules = [
 export default rules;
 ```
 
-#### `Babel`
+#### Babel
 
 [Babel](https://babeljs.io/) is a JavaScript compiler that most modern frameworks leverage in order to be able to convert modern JavaScript syntax into a backwards-compatible version that can be run by older browsers. We will look at Babel optimizations more later on in this documentation.
 
@@ -74,7 +74,7 @@ const rules = [
   {
     test: /\.(js|jsx)$/,
     exclude: /node_modules/,
-    include: path.join(__dirname, `app`),
+    include: path.join(__dirname, `../app`),
     loader: `babel-loader`,
     options: {
       cacheDirectory: true,
@@ -89,7 +89,6 @@ const rules = [
       ]
     }
   }
-
   ...
 ];
 
@@ -98,7 +97,7 @@ export default rules;
 
 The `cacheDirectory` option aims to cache the results of the loader, and future Webpack builds attempt to read from the cache, to save expensive Babel recompilation processes. The `useBuiltIns` option is used so that Babel polyfills will be added automatically when the usage of some feature is unsupported in the target environment.
 
-#### `Sass`
+#### Sass
 
 Sass is a popular CSS preprocessor used in most modern web applications that makes writing styles easier and more productive, allowing things like reusable utilities and CSS functions. To be able to use Sass in something like a React application, a loader needs to be setup in Webpack's `rules` configuration. We want to setup this rule to be optimized and utilize a more performance-centric pattern.
 
@@ -139,7 +138,7 @@ if (!process.env.IS_DEVELOPMENT) {
 export default rules;
 ```
 
-### `Plugins`
+### Plugins
 
 In referring back to the [Low-Hanging Fruit](#low-hanging-fruit) section above, a great first Webpack plugin to leverage is called the [UnusedWebpackPlugin](https://github.com/MatthieuLemoine/unused-webpack-plugin). This plugin lives in your Webpack config's `plugin` array, and when the app is being built, looks for any and all unused files. The plugin can be set up in such a way that the build does not complete successfully if there are unused files found:
 
@@ -202,21 +201,20 @@ The order of these above plugins is important. They control the compression comp
 ```js
 const express = require('express');
 const expressStaticGzip = require('express-static-gzip');
-
 const app = express();
-
-const PATHS = {
-  app: `path/to/app`,
-  bundle: `path/to/dist`
-};
+const DIST_PATH = path.resolve(__dirname, '../dist');
 
 ...
 
-app.use(expressStaticGzip(PATHS.bundle, {
+app.use(expressStaticGzip(DIST_PATH, {
   enableBrotli: true,
   orderPreference: [`br`, `gz`],
-  setHeaders: function (res, path) {
-    res.setHeader("Cache-Control", "public, max-age=31536000");
+  setHeaders: (res, path) => {
+    if (path.includes('index.html')) {
+      res.setHeader("Cache-Control", "public, no-store");
+    } else {
+      res.setHeader("Cache-Control", "public, max-age=31536000");
+    }
   }
 }));
 ```
@@ -269,7 +267,7 @@ export default plugins;
 
 The [CrittersWebpackPlugin](https://github.com/GoogleChromeLabs/critters) inline's the app's critical CSS and then lazy-loads the rest, on-demand. The [CssCleanupPlugin](https://github.com/do-web/css-cleanup-webpack-plugin) is plugin that aims to remove unused CSS and duplicate rules. Finally, the [AutomaticPrefetchPlugin](https://webpack.js.org/plugins/automatic-prefetch-plugin/) watches for modules from previous builds, and tries to improve on incremental build times.
 
-### `Optimization`
+### Optimization
 
 The Webpack `optimization` array allows for a configuration which targets production-based performance optimizations.
 
@@ -305,11 +303,11 @@ const optimization = {
 export default optimization;
 ```
 
-#### `Code Splitting and Chunks`
+#### Code Splitting and Chunks
 
 Code splitting consists of splitting code into various bundles which can then be lazy-loaded on-demand. As an app grows, so does the size of it, and code splitting is a paradigm which allows you to break down the size of large modules into smaller chunks, decreasing the weight of negative performance hits.
 
-#### `Webpack Hints and Magic Comments`
+#### Webpack Hints and Magic Comments
 
 Webpack has a pattern which is referred to as hints or magic comments. When implementing code splitting / lazy-loading, a common library that is used is the [Loadable Components](https://loadable-components.com/) library. This library is typically used over the native `React.lazy` and `React.Suspense` features because those native features do not work with server-side rendered apps, while the _Loadable Components_ library does.
 
@@ -384,7 +382,7 @@ const optimization = {
 export default optimization;
 ```
 
-### `Webpack Mode`
+### Webpack Mode
 
 Another important and useful Webpack optimization is one of the most simple ones. In the main Webpack configuration file:
 
@@ -409,7 +407,7 @@ const webpackConfig = {
 export default webpackConfig;
 ```
 
-## `Babel Optimizations`
+## Babel Optimizations
 
 There are also Babel optimizations that coincide with Webpack optimizations for a truly efficient application.
 
@@ -458,7 +456,7 @@ plugins: [
 ]
 ```
 
-## `Dynamic Imports`
+## Dynamic Imports
 
 This is a very powerful `import` pattern which allows you to utilize imports as if they were promises, and import modules on demand. For example, if using something like [Firebase](https://firebase.google.com/), we can import dependencies dynamically, at the moment that we need them, instead of always importing heavy dependencies statically:
 
@@ -482,7 +480,7 @@ async initialize() {
 }
 ```
 
-## `Image Optimizations`
+## Image Optimizations
 
 Images are a critical component of most modern web applications, and when they are not properly optimized, they can have quite a negative impact on the performance of a website. There are numerous factors to consider, like:
 
@@ -496,7 +494,7 @@ In performance audits, attributes like `width` and `height` are now considered c
 <img alt="Description" height="400" src="/path/to/image" width="600" />
 ```
 
-### `imgix`
+### Imgix
 
 To save time in going thru hundreds of assets and either finding a UX resource to resize images, change their format, their quality, etc., an image service called [_imgix_](https://imgix.com/) was put into place. This image solution "_transforms, optimizes, and intelligently caches your entire image library for fast websites and apps using simple and robust URL parameters._"
 
@@ -542,7 +540,7 @@ import * as Imgix from 'utils/imgix';
 <img alt="Description" src={Imgix.getAwsAssetPath(`img/image.png`)} />
 ```
 
-#### `Default imgix Config`
+#### Default imgix Config
 
 _imgix_ also allows you to set default parameters for images from within the account dashboard, so that they may serve as primary defaults, or as a fallback. There is an option to set a default image, which will render as a placeholder image if there is an issue with retrieving the desired image path. Conversely, you can also set a default error image, if the resulting image path will return an error:
 
@@ -552,7 +550,7 @@ As you can see from the above image, the `format` value is missing from the `aut
 
 ![image-cache-settings](https://user-images.githubusercontent.com/7631797/172155698-d8342222-0a34-4d69-bf3d-97bb1f372ebf.png)
 
-### `Lazy Loading`
+### Lazy Loading
 
 For lazy-loading images, there are the terms above-the-fold and below-the-fold. For the latter, these are images that are not immediately visible when the site first loads, and the former are the immediate images that are in the viewport right when the site loads. Lazy-loading images involves putting emphasis on below-the-fold images, only loading them when they come into the viewport. To accomplish this, there is the [Intersection Observer API](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API), which is a utility that listens to a scroll event and observes changes in the intersection of a target element with an ancestor element or with a top-level element's viewport.
 

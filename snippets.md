@@ -11,6 +11,11 @@ cat <<< "prepend"
 $(cat file) > file
 ```
 
+```sh
+# kill homebrew process
+rm -rf $(brew --prefix)/var/homebrew/locks
+```
+
 # Neovim 
 
 ```sh
