@@ -1,0 +1,27 @@
+### Kustomer
+```js
+// secret token
+edb254f9a2eb3a1c3a68c54eda6b59c6418d012313613431562ec76d820fbd09
+
+// API key webhooks
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzNzUyMTU2OGVhZjgxNWU3NmZhODMwZSIsInVzZXIiOiI2Mzc1MjE1NjU3MjBmNjdmYWMyNjJiYzUiLCJvcmciOiI1ZjViZTcwZDNjNzUyZjAwMTIyOGYwMzIiLCJvcmdOYW1lIjoid2FpdHItc2FuZGJveCIsInVzZXJUeXBlIjoibWFjaGluZSIsInBvZCI6InByb2QxIiwicm9sZXMiOlsib3JnLmFkbWluIiwib3JnLmhvb2tzIiwib3JnLnRyYWNraW5nIiwib3JnLnVzZXIiLCJvcmcucGVybWlzc2lvbiJdLCJhdWQiOiJ1cm46Y29uc3VtZXIiLCJpc3MiOiJ1cm46YXBpIiwic3ViIjoiNjM3NTIxNTY1NzIwZjY3ZmFjMjYyYmM1In0.Y-JJAUqfADRRdXawzMMNte4__MTT-rWudHuCPXOBx6A
+```
+
+### AWS
+
+```js
+// Access Keys
+Access key ID,Secret access key
+AKIAYKSCAPMUM5Z3EYDV,DWKMdEV0IehayeSDyRdumC/DEmo5qoH/yKJIMxJM
+```
+
+### Bugsnag
+
+```js
+// Recovery Codes
+ab1a74ee79243055
+501b2329a1f9fd92
+9f7a9cc9a41bedc8
+fc4197339ee774f3
+af8aa88780117859
+```
