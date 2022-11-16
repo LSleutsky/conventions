@@ -63,9 +63,6 @@ aws s3 ls
 ```sh
 # list s3 bucket contents
 aws s3 ls s3://<bucket_name>
-
-# list s3 bucket directory contents
-aws s3 ls s3://<bucket_name>/<dir>
 ```
 
 ```sh
