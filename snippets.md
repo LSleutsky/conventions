@@ -94,3 +94,10 @@ kubectl edit pod -n <namespace> <pod> -o yaml
 # deploy saved changes from the edit command above
 kubectl apply -f <filename>
 ```
+
+# Linux
+
+```sh
+# arch linux archinstall fix
+find /usr/lib/python3.10/site-packages/archinstall/ -type f -exec sed -i "s/lsblk --json/lsblk -a -e <MAJ #> --json/g" {} \;
+```
