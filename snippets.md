@@ -12,6 +12,15 @@ $(cat file) > file
 ```
 
 ```sh
+# add text to file heredoc
+cat >> file << EOF
+add content
+on multiple lines
+if needed
+EOF
+```
+
+```sh
 # kill homebrew process
 rm -rf $(brew --prefix)/var/homebrew/locks
 ```
@@ -31,6 +40,11 @@ rm -rf $(brew --prefix)/var/homebrew/locks
 ```sh
 # treesitter dependencies
 TSInstall bash comment css diff dockerfile dot git_rebase gitattributes gitcommit gitignore graphql help hjson html http javascript jsdoc json json5 jsonc lua make markdown markdown_inline mermaid php pug python query regex ruby rust scss todotxt toml tsx typescript vim yaml
+```
+
+```sh
+# mason language servers
+MasonInstall bash-language-server chrome-debug-adapter css-lsp cssmodules-language-server diagnostics-languageserver docker-compose-language-service dockerfile-language-server dot-language-server eslint-lsp eslint_d firefox-debug-adapter html-lsp js-debug-adapter json-lsp jsonlint lua-language-server node-debug2-adapter prettier stylua tailwindcss-language-server typescript-language-server vim-language-server yaml-language-server yamllint
 ```
 
 ```sh
