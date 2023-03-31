@@ -18,6 +18,13 @@ add content
 on multiple lines
 if needed
 EOF
+
+# override file heredoc
+cat > file << EOF
+whatever new content
+will be in file
+overwriting existing
+EOF
 ```
 
 ```sh
