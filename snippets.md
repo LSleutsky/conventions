@@ -9,9 +9,7 @@ open -n -a /Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --args
 # prepend text to file
 cat <<< "prepend"
 $(cat file) > file
-```
 
-```sh
 # add text to file heredoc
 cat >> file << EOF
 add content
