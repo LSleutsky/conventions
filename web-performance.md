@@ -377,6 +377,7 @@ const optimization = {
         enforce: true
       }
     }
+  }
 };
 
 export default optimization;
