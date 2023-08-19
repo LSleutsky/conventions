@@ -49,7 +49,7 @@ TSInstall bash comment cpp css csv diff dockerfile dot fish git_config git_rebas
 
 ```sh
 # mason language servers
-MasonInstall bash-language-server chrome-debug-adapter css-lsp cssmodules-language-server diagnostics-languageserver docker-compose-language-service dockerfile-language-server dot-language-server eslint-lsp eslint_d firefox-debug-adapter html-lsp js-debug-adapter json-lsp jsonlint lua-language-server node-debug2-adapter prettier stylua tailwindcss-language-server typescript-language-server vim-language-server yaml-language-server yamllint
+MasonInstall bash-language-server css-lsp cssmodules-language-server diagnostics-languageserver docker-compose-language-service dockerfile-language-server dot-language-server eslint-lsp eslint_d html-lsp json-lsp jsonlint lua-language-server prettierd stylua tailwindcss-language-server typescript-language-server vim-language-server yaml-language-server yamllint
 ```
 
 ```sh
