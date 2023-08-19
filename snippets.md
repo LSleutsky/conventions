@@ -44,7 +44,7 @@ rm -rf $(brew --prefix)/var/homebrew/locks
 
 ```sh
 # treesitter dependencies
-TSInstall bash comment css diff dockerfile dot git_rebase gitattributes gitcommit gitignore graphql help hjson html http javascript jsdoc json json5 jsonc lua make markdown markdown_inline mermaid php pug python query regex ruby rust scss todotxt toml tsx typescript vim yaml
+TSInstall bash comment cpp css csv diff dockerfile dot fish git_config git_rebase gitattributes gitcommit gitignore graphql hjson html htmldjango http ini javascript jsdoc json json5 jsonc lua luap luau make markdown markdown_inline mermaid passwd php pug python query regex ruby rust scss sql svelte todotxt toml tsx typescript vim yaml yuck xml zig
 ```
 
 ```sh
