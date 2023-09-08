@@ -30,6 +30,11 @@ EOF
 rm -rf $(brew --prefix)/var/homebrew/locks
 ```
 
+```sh
+# create directories from file names and move files into new dir
+for file in *.txt; do mkdir -- "${file%.txt}"; mv -- "$file" "${file%.txt}"; done
+```
+
 # Neovim 
 
 ```sh
