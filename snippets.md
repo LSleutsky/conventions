@@ -121,7 +121,39 @@ kubectl apply -f <filename>
 
 # Linux
 
+### Arch
 ```sh
 # arch linux archinstall fix
 find /usr/lib/python3.10/site-packages/archinstall/ -type f -exec sed -i "s/lsblk --json/lsblk -a -e <MAJ #> --json/g" {} \;
+```
+
+### Nix
+```sh
+sudo touch /root/fprintclear.py
+sudo nvim /root/fprintclear.py #paste below python script
+sudo su
+cd
+nix-shell -p pkgs.libfprint gobject-introspection gusb 'python3.withPackages(ps : with ps; [ pygobject3 ])'
+python3 fprintclear.py
+
+############### fprintclear.py ###############
+#!/usr/bin/env python3
+
+import gi
+gi.require_version('FPrint', '2.0')
+from gi.repository import FPrint
+
+ctx = FPrint.Context()
+
+for dev in ctx.get_devices():
+  print(dev)
+  print(dev.get_driver())
+  print(dev.props.device_id);
+
+  dev.open_sync()
+
+  dev.clear_storage_sync()
+  print("All prints deleted.")
+
+  dev.close_sync()
 ```
