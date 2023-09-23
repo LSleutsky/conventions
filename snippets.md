@@ -130,13 +130,13 @@ find /usr/lib/python3.10/site-packages/archinstall/ -type f -exec sed -i "s/lsbl
 ### Nix
 ```sh
 sudo touch /root/fprintclear.py
-sudo nvim /root/fprintclear.py #paste below python script
+sudo nvim /root/fprintclear.py
 sudo su
 cd
 nix-shell -p pkgs.libfprint gobject-introspection gusb 'python3.withPackages(ps : with ps; [ pygobject3 ])'
 python3 fprintclear.py
 
-############### fprintclear.py ###############
+################### fprintclear.py ###################
 #!/usr/bin/env python3
 
 import gi
