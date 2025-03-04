@@ -532,9 +532,6 @@ This will work the same way on an `Image` element imported from `next/image` in 
 // some-next-component.js
 
 import Image from 'next/image';
-
-import * as Imgix from 'utils/imgix';
-
 ...
 
 <Image alt="Description" className="lazyload" data-src="/path/to/image" />
