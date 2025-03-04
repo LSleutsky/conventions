@@ -1,6 +1,6 @@
 # ESLint
 
-The below is a configuration template for an `.eslint.config.js` file for a modern React project:
+The below is a configuration template for an `eslint.config.js` file for a modern React project:
 
 ```js
 import globals from 'globals';
