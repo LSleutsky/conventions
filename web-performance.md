@@ -495,62 +495,6 @@ In performance audits, attributes like `width` and `height` are now considered c
 <img alt="Description" height="400" src="/path/to/image" width="600" />
 ```
 
-### Imgix
-
-To save time in going thru hundreds of assets and either finding a UX resource to resize images, change their format, their quality, etc., an image service called [_imgix_](https://imgix.com/) was put into place. This image solution "_transforms, optimizes, and intelligently caches your entire image library for fast websites and apps using simple and robust URL parameters._"
-
-What does this mean for our app? All of our assets are stored in an AWS S3 bucket. _imgix_ allows you to link and sync these buckets through their service, and then a URL is provided that routes the assets through _imgix's_ sources, allowing the addition of URL parameters to handle things like compression, image size, quality, dimensions, and much more.
-
-In practice, it is very simple to leverage this service in an application. First, a util file is created for the _imgix_ service:
-
-```js
-const DEFAULT_PROPS = {
-  auto: `compress,format`,
-  fit: `crop`,
-  cs: `tinysrgb`,
-  q: `15`,
-  fm: `avif`
-};
-
-const IMGIX_URL = `https://web.imgix.net/`;
-
-const propsToParams = props => {
-  const params = Object.entries(props).reduce((currentParams, prop) => {
-    currentParams.push(`${prop[0]}=${prop[1]}`);
-
-    return currentParams;
-  }, []);
-
-  return encodeURI(params.join(`&`));
-};
-
-export const getAwsAssetPath = (bucketUrl, props) => {
-  const params = propsToParams({ ...DEFAULT_PROPS, ...props });
-
-  return `${IMGIX_URL}${bucketUrl}?${params}`;
-}
-```
-
-Then, when using images, we can simply get the asset source path by declaring:
-
-```js
-import * as Imgix from 'utils/imgix';
-
-...
-
-<img alt="Description" src={Imgix.getAwsAssetPath(`img/image.png`)} />
-```
-
-#### Default imgix Config
-
-_imgix_ also allows you to set default parameters for images from within the account dashboard, so that they may serve as primary defaults, or as a fallback. There is an option to set a default image, which will render as a placeholder image if there is an issue with retrieving the desired image path. Conversely, you can also set a default error image, if the resulting image path will return an error:
-
-![image-defaults](https://user-images.githubusercontent.com/7631797/172155701-c3475f2c-6762-4ac1-b379-24ee96b943ec.png)
-
-As you can see from the above image, the `format` value is missing from the `auto` parameter in the default config for the _imgix_ source, but we are using `format` in our util. The reason is simple: the `auto` parameter accepts different values as defaults, but `format` is not one of them, so we have to include it manually. The _imgix_ service also allows setting caching policies for images:
-
-![image-cache-settings](https://user-images.githubusercontent.com/7631797/172155698-d8342222-0a34-4d69-bf3d-97bb1f372ebf.png)
-
 ### Lazy Loading
 
 For lazy-loading images, there are the terms above-the-fold and below-the-fold. For the latter, these are images that are not immediately visible when the site first loads, and the former are the immediate images that are in the viewport right when the site loads. Lazy-loading images involves putting emphasis on below-the-fold images, only loading them when they come into the viewport. To accomplish this, there is the [Intersection Observer API](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API), which is a utility that listens to a scroll event and observes changes in the intersection of a target element with an ancestor element or with a top-level element's viewport.
@@ -582,18 +526,6 @@ Then using the _lazysizes_ pattern on an `img` tag is very simple:
 <img alt="Description" className="lazyload" data-src="/path/to/image" />
 ```
 
-This can - and should - of course be combined with the _imgix_ service pattern:
-
-```js
-// some-component.js
-
-import * as Imgix from 'utils/imgix';
-
-...
-
-<img alt="Description" className="lazyload" data-src={Imgix.getAwsAssetPath(`img/image.png`)} />
-```
-
 This will work the same way on an `Image` element imported from `next/image` in a Next.js application:
 
 ```js
@@ -605,5 +537,37 @@ import * as Imgix from 'utils/imgix';
 
 ...
 
-<Image alt="Description" className="lazyload" data-src={Imgix.getAwsAssetPath(`img/image.png`)} />
+<Image alt="Description" className="lazyload" data-src="/path/to/image" />
 ```
+
+## Frontend
+
+More than just adding markup and styling elements, frontend involves intricate needs to build a maintainable, scalable application.
+
+### State Management
+
+Handling dynamic data efficiently using tools like Redux, React Context, or Zustand, ensuring seamless app behavior.
+
+### Performance Optimization
+
+Implementing lazy loading, tree shaking, and optimizing rendering strategies to enhance speed and efficiency.
+
+### API Integrations
+
+Managing complex asynchronous data flows, caching mechanisms, and WebSockets for real-time updates.
+
+### Security Considerations
+
+Preventing XSS attacks, handling authentication securely, and safeguarding user inputs from vulnerabilities.
+
+### Frontend System Design
+
+Architecting scalable and maintainable applications, designing component hierarchies, and ensuring reusability.
+
+### Tooling & DevOps
+
+Working with CI/CD pipelines, Webpack, Vite, and integrating frontend deployments into modern cloud-based infrastructures.
+
+### Accessibility & UX
+
+Ensuring that applications are inclusive, providing seamless experiences for users with disabilities.
